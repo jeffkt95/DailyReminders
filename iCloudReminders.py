@@ -49,6 +49,6 @@ class iCloudReminders:
 
                 msg = msg + ", due " + dateStr
             
-        msg = msg + "\n\n" + "Add/remove/mark items done using your iPhone Reminders app."
+        #msg = msg + "\n\n" + "Add/remove/mark items done using your iPhone Reminders app."
         
         return msg

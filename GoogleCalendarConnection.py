@@ -6,6 +6,7 @@ import datetime
 from datetime import timedelta
 import pytz
 from datetime import datetime, date, time
+import calendar
 
 #Python calendar API: https://developers.google.com/resources/api-libraries/documentation/calendar/v3/python/latest/
 class GoogleCalendarConnection:
@@ -31,7 +32,7 @@ class GoogleCalendarConnection:
         startTime = getUtcTimeAtMidnight(midnightToday)
         endTime = getUtcTimeAtMidnight(futureTime)
         
-        print("Getting calendar events from " + str(startTime) + " to " + str(endTime))
+        #print("Getting calendar events from " + str(startTime) + " to " + str(endTime))
         events_result = self.service.events().list(calendarId='jeffkt95@gmail.com', timeMin=startTime, timeMax=endTime,
                                               singleEvents=True, orderBy='startTime').execute()
         self.jeffCalendarEvents = events_result.get('items', [])
@@ -41,17 +42,25 @@ class GoogleCalendarConnection:
         self.ktCalendarEvents = events_result.get('items', [])
 
     def formatEvents(self):
+        eventsStr = "\n" + "Google calendar events"
+        
+        eventsStr = eventsStr + "\n" + "-Jeff's calendar events:"
         if not self.jeffCalendarEvents:
-            print('No upcoming events found.')
+            eventsStr = eventsStr + "\n" + "  * None"
         for event in self.jeffCalendarEvents:
             start = event['start'].get('dateTime', event['start'].get('date'))
-            print(start, event['summary'])
+            startStr = getPrettyDateTimeString(start)
+            eventsStr = eventsStr + "\n" + "  * " + startStr + ": " + event['summary']
             
+        eventsStr = eventsStr + "\n" + "-Katie's calendar events:"
         if not self.ktCalendarEvents:
-            print('No upcoming events found.')
+            eventsStr = eventsStr + "\n" + " * None"
         for event in self.ktCalendarEvents:
             start = event['start'].get('dateTime', event['start'].get('date'))
-            print(start, event['summary'])
+            startStr = getPrettyDateTimeString(start)
+            eventsStr = eventsStr + "\n" + "  * " + startStr + ": " + event['summary']
+            
+        return eventsStr
 
             
 def getUtcTimeAtMidnight(date):
@@ -64,4 +73,31 @@ def getUtcTimeAtMidnight(date):
     utcTime = utcTimeIso[:-6] + 'Z'
     
     return utcTime
+    
+def getPrettyDateTimeString(dateTimeStr):
+    dateTimeObj = getDateTimeFromString(dateTimeStr)
+    
+    dayStr = calendar.day_name[dateTimeObj.weekday()]
+    dayStr = dayStr[:3]
+    
+    dateStr = str(dateTimeObj.month) + "/" + str(int(dateTimeObj.day))
+    
+    
+    #dateStr = calendar.day_name[dateTimeObj.weekday()] + ", " + calendar.month_name[dateTimeObj.month] + " " + str(int(dateTimeObj.day))
+    timeStr = dateTimeObj.strftime('%#I:%M%p')
+    return dayStr + " " + dateStr + ", " + timeStr
+    
+def getDateTimeFromString(dateTimeStr):
+    dateStr = dateTimeStr[:10]
+    timeStr = dateTimeStr[11:-9]
+    
+    year = dateStr[:4]
+    month = dateStr[5:7]
+    day = dateStr[8:10]
+    hour = timeStr[:2]
+    minute = timeStr[4:5]
+    
+    ret = datetime(int(year), int(month), int(day), int(hour), int(minute))
+    return ret
+        
     
