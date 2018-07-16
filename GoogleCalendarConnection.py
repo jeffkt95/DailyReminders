@@ -88,16 +88,27 @@ def getPrettyDateTimeString(dateTimeStr):
     return dayStr + " " + dateStr + ", " + timeStr
     
 def getDateTimeFromString(dateTimeStr):
+    #If the dateTimeStr is only 10 long, then it's just a date with no time; an all-day event. Just return date.
+    if (len(dateTimeStr) == 10):
+        hasTime = False
+    else:
+        hasTime = True
+        
     dateStr = dateTimeStr[:10]
-    timeStr = dateTimeStr[11:-9]
+    if (hasTime):
+        timeStr = dateTimeStr[11:-9]
     
     year = dateStr[:4]
     month = dateStr[5:7]
     day = dateStr[8:10]
-    hour = timeStr[:2]
-    minute = timeStr[4:5]
-    
-    ret = datetime(int(year), int(month), int(day), int(hour), int(minute))
+    if (hasTime):
+        hour = timeStr[:2]
+        minute = timeStr[4:5]
+
+    if (hasTime):
+        ret = datetime(int(year), int(month), int(day), int(hour), int(minute))
+    else:
+        ret = datetime(int(year), int(month), int(day))
     return ret
         
     
