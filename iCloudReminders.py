@@ -3,9 +3,10 @@ import calendar
 
 class iCloudReminders:
     
-    def __init__(self, username, password, reminderListName):
+    def __init__(self, username, password, katieListName, jeffListName):
         self.iCloudService = PyiCloudService(username, password)
-        self.reminderListName = reminderListName
+        self.katieListName = katieListName
+        self.jeffListName = jeffListName
         self.loginAndGetReminders()
 
     def loginAndGetReminders(self):
@@ -31,17 +32,34 @@ class iCloudReminders:
                 sys.exit(1)
         
         ics.reminders.refresh()
-        self.reminders = ics.reminders.lists[self.reminderListName]
+        self.katieReminders = ics.reminders.lists[self.katieListName]
+        self.jeffReminders = ics.reminders.lists[self.jeffListName]
         
     def printReminders(self):
-        for listItem in self.reminders:
+        print("Katie list:")
+        for listItem in self.katieReminders:
+            print("Reminder item: " + str(listItem))
+            print("  Item name: " + listItem['title'])
+            print("  Item due date: " + str(listItem['due']))
+        print("")
+        print("Jeff list:")
+        for listItem in self.jeffReminders:
             print("Reminder item: " + str(listItem))
             print("  Item name: " + listItem['title'])
             print("  Item due date: " + str(listItem['due']))
 
     def formatMessage(self):
-        msg = "\n" + "Here are your daily reminders!"
-        for listItem in self.reminders:
+        msg = "\n" + "Here are your Katie's reminders!"
+        for listItem in self.katieReminders:
+            msg = msg + "\n" + "  * " + listItem['title'] 
+            if (listItem['due'] is not None):
+                dueDate = listItem['due']
+                dateStr = calendar.day_name[dueDate.weekday()] + ", " + calendar.month_name[dueDate.month] + " " + str(int(dueDate.day))
+
+                msg = msg + ", due " + dateStr
+
+        msg = msg + "\n\n" + "Here are your Jeff's reminders!"
+        for listItem in self.jeffReminders:
             msg = msg + "\n" + "  * " + listItem['title'] 
             if (listItem['due'] is not None):
                 dueDate = listItem['due']

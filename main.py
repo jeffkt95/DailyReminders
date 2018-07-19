@@ -17,7 +17,7 @@ def main():
         textKatie = True
         
     if ("icloudReminders" in sys.argv):        
-        icReminders = iCloudReminders(username, password, 'Family')
+        icReminders = iCloudReminders(username, password, 'Katie List', 'Jeff List')
         icRemindersTextMessage = icReminders.formatMessage()
         print(icRemindersTextMessage)
         
