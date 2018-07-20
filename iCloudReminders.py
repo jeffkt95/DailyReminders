@@ -49,7 +49,7 @@ class iCloudReminders:
             print("  Item due date: " + str(listItem['due']))
 
     def formatMessage(self):
-        msg = "\n" + "Here are your Katie's reminders!"
+        msg = "\n" + "Here are Katie's reminders:"
         for listItem in self.katieReminders:
             msg = msg + "\n" + "  * " + listItem['title'] 
             if (listItem['due'] is not None):
@@ -58,7 +58,7 @@ class iCloudReminders:
 
                 msg = msg + ", due " + dateStr
 
-        msg = msg + "\n\n" + "Here are your Jeff's reminders!"
+        msg = msg + "\n\n" + "Here are Jeff's reminders:"
         for listItem in self.jeffReminders:
             msg = msg + "\n" + "  * " + listItem['title'] 
             if (listItem['due'] is not None):
