@@ -4,6 +4,13 @@ from iCloudReminders import iCloudReminders
 from GoogleCalendarConnection import GoogleCalendarConnection
 
 def main():
+    usage = "usage: main.py <icloudUsername> <icloudPassword> <optional:icloudReminders> <optional:googleCalendar> <optional:textJeff> <optional:textKatie>"
+    usage = usage + "\n\nThe first two arguments must be the icloud username and password, respectively."
+    usage = usage + "\nAfter that, in any order, specify if you want 'icloudReminders', 'googleCalendar' reminders, and if you want to 'textKatie' and/or 'textJeff'."
+    if (len(sys.argv) < 3):
+        print(usage)
+        exit(0)
+        
     twilioClient = TwilioSms()
     
     username = sys.argv[1]

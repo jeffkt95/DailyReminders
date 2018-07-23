@@ -75,24 +75,29 @@ def getUtcTimeAtMidnight(date):
     return utcTime
     
 def getPrettyDateTimeString(dateTimeStr):
-    dateTimeObj = getDateTimeFromString(dateTimeStr)
+    allDayEvent = isAllDayEvent(dateTimeStr)
+    
+    dateTimeObj = getDateTimeFromString(dateTimeStr, allDayEvent)
     
     dayStr = calendar.day_name[dateTimeObj.weekday()]
     dayStr = dayStr[:3]
     
     dateStr = str(dateTimeObj.month) + "/" + str(int(dateTimeObj.day))
     
-    
-    #dateStr = calendar.day_name[dateTimeObj.weekday()] + ", " + calendar.month_name[dateTimeObj.month] + " " + str(int(dateTimeObj.day))
-    timeStr = dateTimeObj.strftime('%#I:%M%p')
-    return dayStr + " " + dateStr + ", " + timeStr
-    
-def getDateTimeFromString(dateTimeStr):
-    #If the dateTimeStr is only 10 long, then it's just a date with no time; an all-day event. Just return date.
-    if (len(dateTimeStr) == 10):
-        hasTime = False
+    if (allDayEvent):
+        ret = dayStr + " " + dateStr
     else:
-        hasTime = True
+        timeStr = dateTimeObj.strftime('%#I:%M%p')
+        ret = dayStr + " " + dateStr + ", " + timeStr
+    return ret
+    
+def isAllDayEvent(dateTimeStr):
+    #If the dateTimeStr is only 10 long, then it's just a date with no time; an all-day event
+    return len(dateTimeStr) == 10
+    
+def getDateTimeFromString(dateTimeStr, allDayEvent = False):
+    #If it's an all day event, it doesn't have a time. Just return date.
+    hasTime = not allDayEvent
         
     dateStr = dateTimeStr[:10]
     if (hasTime):
@@ -103,7 +108,7 @@ def getDateTimeFromString(dateTimeStr):
     day = dateStr[8:10]
     if (hasTime):
         hour = timeStr[:2]
-        minute = timeStr[4:5]
+        minute = timeStr[3:5]
 
     if (hasTime):
         ret = datetime(int(year), int(month), int(day), int(hour), int(minute))
