@@ -49,24 +49,28 @@ class iCloudReminders:
             print("  Item due date: " + str(listItem['due']))
 
     def formatMessage(self):
-        msg = "\n" + "Here are Katie's reminders:"
-        for listItem in self.katieReminders:
-            msg = msg + "\n" + "  * " + listItem['title'] 
-            if (listItem['due'] is not None):
-                dueDate = listItem['due']
-                dateStr = calendar.day_name[dueDate.weekday()] + ", " + calendar.month_name[dueDate.month] + " " + str(int(dueDate.day))
+        if (len(self.katieReminders) > 0):
+            msg = "\n" + "Here are Katie's reminders:"
+            for listItem in self.katieReminders:
+                msg = msg + "\n" + "  * " + listItem['title'] 
+                if (listItem['due'] is not None):
+                    dueDate = listItem['due']
+                    dateStr = calendar.day_name[dueDate.weekday()] + ", " + calendar.month_name[dueDate.month] + " " + str(int(dueDate.day))
 
-                msg = msg + ", due " + dateStr
+                    msg = msg + ", due " + dateStr
+        else:
+            msg = msg + "\n\n" + "Katie has no reminders."
 
-        msg = msg + "\n\n" + "Here are Jeff's reminders:"
-        for listItem in self.jeffReminders:
-            msg = msg + "\n" + "  * " + listItem['title'] 
-            if (listItem['due'] is not None):
-                dueDate = listItem['due']
-                dateStr = calendar.day_name[dueDate.weekday()] + ", " + calendar.month_name[dueDate.month] + " " + str(int(dueDate.day))
+        if (len(self.jeffReminders) > 0):
+            msg = msg + "\n\n" + "Here are Jeff's reminders:"
+            for listItem in self.jeffReminders:
+                msg = msg + "\n" + "  * " + listItem['title'] 
+                if (listItem['due'] is not None):
+                    dueDate = listItem['due']
+                    dateStr = calendar.day_name[dueDate.weekday()] + ", " + calendar.month_name[dueDate.month] + " " + str(int(dueDate.day))
 
-                msg = msg + ", due " + dateStr
+                    msg = msg + ", due " + dateStr
+        else:
+            msg = msg + "\n\n" + "Jeff has no reminders."
             
-        #msg = msg + "\n\n" + "Add/remove/mark items done using your iPhone Reminders app."
-        
         return msg
